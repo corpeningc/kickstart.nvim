@@ -75,7 +75,6 @@ vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 
 -- Preview substitutions live, as you type!
 vim.o.inccommand = 'split'
-
 -- Show which line your cursor is on
 vim.o.cursorline = true
 
@@ -125,6 +124,7 @@ vim.keymap.set('n', '<leader>j', '<C-w>j', { desc = 'Go to bottom pane' })
 -- [[ Better search ]]
 vim.keymap.set('n', 'n', 'nzzzv', { desc = 'Next search result' })
 vim.keymap.set('n', 'N', 'Nzzzv', { desc = 'Next search result' })
+
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
@@ -233,6 +233,24 @@ require('lazy').setup({
       },
     },
   },
+  {
+    'numToStr/Comment.nvim',
+    opts = {
+      opleader = {
+        line = '<leader>c',
+        block = '<leader>b',
+      },
+      toggler = {
+        line = '<leader>cc',
+        block = '<leader>bb',
+      },
+      extra = {
+        above = '<leader>cO',
+        below = '<leader>co',
+        eol = '<leader>cA',
+      },
+    },
+  },
 
   -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
   --
@@ -315,7 +333,6 @@ require('lazy').setup({
       'nvim-lua/plenary.nvim',
       { -- If encountering errors, see telescope-fzf-native README for installation instructions
         'nvim-telescope/telescope-fzf-native.nvim',
-
         -- `build` is used to run some command when the plugin is installed/updated.
         -- This is only run then, not every time Neovim starts up.
         build = 'make',
@@ -485,26 +502,28 @@ require('lazy').setup({
             vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
           end
 
+          map('gh', vim.lsp.buf.hover, 'Hover')
+
           -- Rename the variable under your cursor.
           --  Most Language Servers support renaming across files, etc.
-          map('grn', vim.lsp.buf.rename, '[R]e[n]ame')
+          map('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
+
+          map('<leader>r', vim.lsp.buf.rename, '[R]e[n]ame')
 
           -- Execute a code action, usually your cursor needs to be on top of an error
           -- or a suggestion from your LSP for this to activate.
           map('gra', vim.lsp.buf.code_action, '[G]oto Code [A]ction', { 'n', 'x' })
 
           -- Find references for the word under your cursor.
-          map('grr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
+          map('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
 
           -- Jump to the implementation of the word under your cursor.
           --  Useful when your language has ways of declaring types without an actual implementation.
-          map('gri', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
+          map('gi', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
 
           -- Jump to the definition of the word under your cursor.
           --  This is where a variable was first declared, or where a function is defined, etc.
           --  To jump back, press <C-t>.
-          map('grd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
-
           -- WARN: This is not Goto Definition, this is Goto Declaration.
           --  For example, in C this would take you to the header.
           map('grD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
@@ -520,7 +539,7 @@ require('lazy').setup({
           -- Jump to the type of the word under your cursor.
           --  Useful when you're not sure what type a variable is and you want to see
           --  the definition of its *type*, not where it was *defined*.
-          map('grt', require('telescope.builtin').lsp_type_definitions, '[G]oto [T]ype Definition')
+          map('gt', require('telescope.builtin').lsp_type_definitions, '[G]oto [T]ype Definition')
 
           -- This function resolves a difference between neovim nightly (version 0.11) and stable (version 0.10)
           ---@param client vim.lsp.Client
@@ -574,6 +593,16 @@ require('lazy').setup({
             end, '[T]oggle Inlay [H]ints')
           end
         end,
+      })
+
+      -- LSP Hover Config
+      vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, {
+        border = 'rounded',
+      })
+
+      -- LSP Signature Help Config
+      vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, {
+        border = 'rounded',
       })
 
       -- Diagnostic Config
