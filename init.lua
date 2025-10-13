@@ -125,6 +125,11 @@ vim.keymap.set('n', '<leader>j', '<C-w>j', { desc = 'Go to bottom pane' })
 vim.keymap.set('n', 'n', 'nzzzv', { desc = 'Next search result' })
 vim.keymap.set('n', 'N', 'Nzzzv', { desc = 'Next search result' })
 
+-- [[ Newline Keymaps ]]
+vim.keymap.set('n', '<Enter>', 'o<Esc>', { desc = 'Newline Below' })
+
+vim.keymap.set('n', '<leader><Enter>', 'O<Esc>', { desc = 'Newline Above' })
+
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
@@ -195,6 +200,7 @@ rtp:prepend(lazypath)
 --    :Lazy update
 --
 -- NOTE: Here is where you install your plugins.
+-- ppp
 require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   'NMAC427/guess-indent.nvim', -- Detect tabstop and shiftwidth automatically
@@ -202,10 +208,6 @@ require('lazy').setup({
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
   -- keys can be used to configure plugin behavior/loading/etc.
-  --
-  -- Use `opts = {}` to automatically pass options to a plugin's `setup()` function, forcing the plugin to be loaded.
-  --
-
   -- Alternatively, use `config = function() ... end` for full control over the configuration.
   -- If you prefer to call `setup` explicitly, use:
   --    {
@@ -217,10 +219,6 @@ require('lazy').setup({
   --        end,
   --    }
   --
-  -- Here is a more advanced example where we pass configuration
-  -- options to `gitsigns.nvim`.
-  --
-  -- See `:help gitsigns` to understand what the configuration keys do
   { -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
     opts = {
@@ -234,6 +232,10 @@ require('lazy').setup({
     },
   },
   {
+    'stevearc/conform.nvim',
+    opts = {},
+  },
+  { -- Adds comment commands
     'numToStr/Comment.nvim',
     opts = {
       opleader = {
@@ -502,7 +504,7 @@ require('lazy').setup({
             vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
           end
 
-          map('gh', vim.lsp.buf.hover, 'Hover')
+          map('gh', vim.lsp.buf.hover, 'Hover Documentation')
 
           -- Rename the variable under your cursor.
           --  Most Language Servers support renaming across files, etc.
@@ -651,7 +653,7 @@ require('lazy').setup({
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
         -- clangd = {},
-        -- gopls = {},
+        gopls = {},
         -- pyright = {},
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
