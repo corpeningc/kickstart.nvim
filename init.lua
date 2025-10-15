@@ -100,9 +100,13 @@ vim.keymap.set('n', '<leader>o', ':only!<CR>', { desc = 'Close other windows' })
 -- [[ Movement Keymaps ]]
 vim.keymap.set('n', 'H', '^', { desc = 'Go to line start' })
 vim.keymap.set('n', 'L', '$', { desc = 'Go to line end' })
+vim.keymap.set('n', 'K', ':move .-2<CR>==', { desc = 'Go to line start' })
+vim.keymap.set('n', 'J', ':move .+1<CR>==', { desc = 'Go to line end' })
 -- Visual
 vim.keymap.set('v', 'H', '^', { desc = 'Go to line start' })
 vim.keymap.set('v', 'L', '$', { desc = 'Go to line end' })
+vim.keymap.set('v', 'K', ":move '<-2<CR>gv=gv", { desc = 'Go to line start' })
+vim.keymap.set('v', 'J', ":move '>+1<CR>gv=gv", { desc = 'Go to line end' })
 
 -- [[ Indentation ]]
 vim.keymap.set('n', '>', '>>', { desc = 'Indent right' })
@@ -231,10 +235,34 @@ require('lazy').setup({
       },
     },
   },
+
+  {
+    'windwp/nvim-ts-autotag',
+    ft = { 'html', 'javascriptreact', 'typescriptreact', 'astro', 'glimmer', 'handlebars', 'liquid', 'markdown', 'php', 'rescript' },
+    config = function()
+      require('nvim-ts-autotag').setup {
+        enable_close = true,
+        enable_rename = true,
+        enable_close_on_slash = true,
+      }
+    end,
+  },
+
+  {
+    'seblyng/roslyn.nvim',
+    dependencies = {
+      'williamboman/mason.nvim', -- Ensure Mason loads first
+    },
+    opts = {
+      -- your configuration
+    },
+  },
+
   {
     'stevearc/conform.nvim',
     opts = {},
   },
+
   { -- Adds comment commands
     'numToStr/Comment.nvim',
     opts = {
@@ -444,14 +472,22 @@ require('lazy').setup({
       },
     },
   },
+
   {
     -- Main LSP Configuration
     'neovim/nvim-lspconfig',
     dependencies = {
       -- Automatically install LSPs and related tools to stdpath for Neovim
       -- Mason must be loaded before its dependents so we need to set it up here.
-      -- NOTE: `opts = {}` is the same as calling `require('mason').setup({})`
-      { 'mason-org/mason.nvim', opts = {} },
+      {
+        'williamboman/mason.nvim',
+        opts = {
+          registries = {
+            'github:mason-org/mason-registry',
+            'github:Crashdummyy/mason-registry',
+          },
+        },
+      },
       'mason-org/mason-lspconfig.nvim',
       'WhoIsSethDaniel/mason-tool-installer.nvim',
 
@@ -919,6 +955,7 @@ require('lazy').setup({
       --  Check out: https://github.com/echasnovski/mini.nvim
     end,
   },
+
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
@@ -957,7 +994,7 @@ require('lazy').setup({
   -- require 'kickstart.plugins.debug',
   -- require 'kickstart.plugins.indent_line',
   -- require 'kickstart.plugins.lint',
-  -- require 'kickstart.plugins.autopairs',
+  require 'kickstart.plugins.autopairs',
   -- require 'kickstart.plugins.neo-tree',
   -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
