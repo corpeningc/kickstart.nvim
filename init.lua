@@ -237,6 +237,23 @@ require('lazy').setup({
   },
 
   {
+    { -- Toggle terminal
+      'akinsho/toggleterm.nvim',
+      version = '*',
+      config = function()
+        require('toggleterm').setup {
+          open_mapping = [[<leader>t]],
+          direction = 'float',
+        }
+      end,
+    },
+  },
+  {
+    'pmizio/typescript-tools.nvim',
+    dependencies = { 'nvim-lua/plenary.nvim', 'neovim/nvim-lspconfig' },
+    opts = {},
+  },
+  {
     'windwp/nvim-ts-autotag',
     ft = { 'html', 'javascriptreact', 'typescriptreact', 'astro', 'glimmer', 'handlebars', 'liquid', 'markdown', 'php', 'rescript' },
     config = function()
