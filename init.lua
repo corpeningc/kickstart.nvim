@@ -282,6 +282,12 @@ require('lazy').setup({
     opts = {},
   },
 
+  -- Lazy
+  {
+    'olimorris/onedarkpro.nvim',
+    priority = 1000, -- Ensure it loads first
+  },
+
   { -- Adds comment commands
     'numToStr/Comment.nvim',
     opts = {
@@ -1039,6 +1045,7 @@ require('lazy').setup({
   -- In normal mode type `<space>sh` then write `lazy.nvim-plugin`
   -- you can continue same window with `<space>sr` which resumes last telescope search
 }, {
+
   ui = {
     -- If you are using a Nerd Font: set icons to an empty table which will use the
     -- default lazy.nvim defined Nerd Font icons, otherwise define a unicode icons table
@@ -1059,6 +1066,8 @@ require('lazy').setup({
     },
   },
 })
+
+vim.cmd 'colorscheme onedark'
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
