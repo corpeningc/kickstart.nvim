@@ -5,7 +5,7 @@ vim.g.mapleader = ' '
 vim.g.maplocalleagher = ' '
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = false
+vim.g.have_nerd_font = true
 
 -- [[ Setting options ]]
 -- See `:help vim.o`
@@ -237,6 +237,11 @@ require('lazy').setup({
   },
 
   {
+    'nvim-telescope/telescope-fzf-native.nvim',
+    build = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build',
+  },
+
+  {
     { -- Toggle terminal
       'akinsho/toggleterm.nvim',
       version = '*',
@@ -260,9 +265,11 @@ require('lazy').setup({
     ft = { 'html', 'javascriptreact', 'typescriptreact', 'astro', 'glimmer', 'handlebars', 'liquid', 'markdown', 'php', 'rescript' },
     config = function()
       require('nvim-ts-autotag').setup {
-        enable_close = true,
-        enable_rename = true,
-        enable_close_on_slash = true,
+        opts = {
+          enable_close = true,
+          enable_rename = true,
+          enable_close_on_slash = true,
+        },
       }
     end,
   },
@@ -381,6 +388,8 @@ require('lazy').setup({
   --
   -- Use the `dependencies` key to specify the dependencies of a particular plugin
 
+  { 'nvim-tree/nvim-web-devicons', opts = {} },
+
   { -- Fuzzy Finder (files, lsp, etc)
     'nvim-telescope/telescope.nvim',
     event = 'VimEnter',
@@ -481,6 +490,21 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sn', function()
         builtin.find_files { cwd = vim.fn.stdpath 'config' }
       end, { desc = '[S]earch [N]eovim files' })
+    end,
+  },
+
+  {
+    'nvim-tree/nvim-tree.lua',
+    version = '*',
+    lazy = false,
+    dependencies = {
+      'nvim-tree/nvim-web-devicons',
+    },
+    config = function()
+      require('nvim-tree').setup {
+        vim.keymap.set('n', '<leader>F', ':NvimTreeToggle<CR>'),
+        vim.keymap.set('n', '<leader>f', ':NvimTreeFindFile<CR>'),
+      }
     end,
   },
 
@@ -724,6 +748,8 @@ require('lazy').setup({
         'ts_ls',
         'vue_ls',
         'vetur-vls',
+        'gopls',
+        'golangci_lint_ls',
       })
 
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
@@ -976,46 +1002,36 @@ require('lazy').setup({
 
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
+    config = function()
+      require('nvim-treesitter.configs').setup = {
+        ensure_installed = {
+          'bash',
+          'c',
+          'diff',
+          'html',
+          'lua',
+          'luadoc',
+          'markdown',
+          'markdown_inline',
+          'query',
+          'vim',
+          'vimdoc',
+          'vue',
+          'javascript',
+          'typescript',
+          'tsx',
+          'css',
+          'scss',
+        },
+        auto_install = false,
+        highlight = {
+          enable = true,
+          additional_vim_regex_highlighting = false,
+        },
+      }
+    end,
     build = ':TSUpdate',
-    main = 'nvim-treesitter.configs', -- Sets main module to use for opts
-    -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
-    opts = {
-      ensure_installed = {
-        'bash',
-        'c',
-        'diff',
-        'html',
-        'lua',
-        'luadoc',
-        'markdown',
-        'markdown_inline',
-        'query',
-        'vim',
-        'vimdoc',
-        'vue',
-        'javascript',
-        'typescript',
-        'tsx',
-        'css',
-        'scss',
-      },
-      -- Autoinstall languages that are not installed
-      auto_install = true,
-      highlight = {
-        enable = true,
-        -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
-        --  If you are experiencing weird indenting issues, add the language to
-        --  the list of additional_vim_regex_highlighting and disabled languages for indent.
-        additional_vim_regex_highlighting = { 'ruby' },
-      },
-      indent = { enable = true, disable = { 'ruby' } },
-    },
-    -- There are additional nvim-treesitter modules that you can use to interact
-    -- with nvim-treesitter. You should go explore a few and see what interests you:
-    --
-    --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
-    --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
-    --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
+    lazy = false,
   },
 
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
@@ -1068,6 +1084,33 @@ require('lazy').setup({
 })
 
 vim.cmd 'colorscheme onedark'
+
+local lspconfig = require 'lspconfig'
+local configs = require 'lspconfig/configs'
+
+if not configs.golanglsp then
+  configs.golanglsp = {
+    default_config = {
+      cmd = { 'golangci-lint-langserver' },
+      root_dir = lspconfig.util.root_pattern('.git', 'go.mod'),
+      init_options = {
+        commands = {
+          'golangci-lint',
+          'run',
+          '--output.json.path',
+          'stdout',
+          '--show-stats=false',
+          '--issues-exit-code=1',
+          '--allow-parallel-runners',
+        },
+      },
+    },
+  }
+end
+
+lspconfig.golangci_lint_ls.setup {
+  filetypes = { 'go', 'mod' },
+}
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
