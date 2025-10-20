@@ -158,11 +158,19 @@ vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right win
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
--- NOTE: Some terminals have colliding keymaps or are not able to send distinct keycodes
--- vim.keymap.set("n", "<C-S-h>", "<C-w>H", { desc = "Move window to the left" })
--- vim.keymap.set("n", "<C-S-l>", "<C-w>L", { desc = "Move window to the right" })
--- vim.keymap.set("n", "<C-S-j>", "<C-w>J", { desc = "Move window to the lower" })
--- vim.keymap.set("n", "<C-S-k>", "<C-w>K", { desc = "Move window to the upper" })
+-- [[ Powershell setup ]]
+local powershell_options = {
+  shell = 'powershell',
+  shellcmdflag = '-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;',
+  shellredir = '-RedirectStandardOutput %s -NoNewWindow -Wait',
+  shellpipe = '2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode',
+  shellquote = '',
+  shellxquote = '',
+}
+
+for option, value in pairs(powershell_options) do
+  vim.opt[option] = value
+end
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
@@ -255,11 +263,13 @@ require('lazy').setup({
       end,
     },
   },
+
   {
     'pmizio/typescript-tools.nvim',
     dependencies = { 'nvim-lua/plenary.nvim', 'neovim/nvim-lspconfig' },
     opts = {},
   },
+
   {
     'windwp/nvim-ts-autotag',
     ft = { 'html', 'javascriptreact', 'typescriptreact', 'astro', 'glimmer', 'handlebars', 'liquid', 'markdown', 'php', 'rescript' },
