@@ -108,6 +108,10 @@ vim.keymap.set('v', 'L', '$', { desc = 'Go to line end' })
 vim.keymap.set('v', 'K', ":move '<-2<CR>gv=gv", { desc = 'Go to line start' })
 vim.keymap.set('v', 'J', ":move '>+1<CR>gv=gv", { desc = 'Go to line end' })
 
+-- [[ Search ]]
+vim.keymap.set('n', '//', 'viwy/<C-r>"')
+vim.keymap.set('v', '//', 'y/<C-r>"')
+
 -- [[ Indentation ]]
 vim.keymap.set('n', '>', '>>', { desc = 'Indent right' })
 vim.keymap.set('n', '<', '<<', { desc = 'Indent left' })
