@@ -162,18 +162,23 @@ vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right win
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
--- [[ Powershell setup ]]
-local powershell_options = {
-  shell = 'powershell',
-  shellcmdflag = '-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;',
-  shellredir = '-RedirectStandardOutput %s -NoNewWindow -Wait',
-  shellpipe = '2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode',
-  shellquote = '',
-  shellxquote = '',
-}
-
-for option, value in pairs(powershell_options) do
-  vim.opt[option] = value
+-- [[ Shell setup - Conditional based on OS ]]
+if vim.fn.has 'win32' == 1 or vim.fn.has 'win64' == 1 then
+  -- Windows: Use PowerShell
+  local powershell_options = {
+    shell = 'powershell',
+    shellcmdflag = '-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;',
+    shellredir = '-RedirectStandardOutput %s -NoNewWindow -Wait',
+    shellpipe = '2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode',
+    shellquote = '',
+    shellxquote = '',
+  }
+  for option, value in pairs(powershell_options) do
+    vim.opt[option] = value
+  end
+else
+  -- macOS/Linux: Use default shell (zsh/bash)
+  -- No need to set anything, use system default
 end
 
 -- [[ Basic Autocommands ]]
@@ -258,11 +263,18 @@ require('lazy').setup({
       'akinsho/toggleterm.nvim',
       version = '*',
       config = function()
+        -- Detect OS and set appropriate shell
+        local shell = vim.o.shell -- Use system default
+        if vim.fn.has 'win32' == 1 or vim.fn.has 'win64' == 1 then
+          shell = 'powershell'
+        end
+
         require('toggleterm').setup {
           open_mapping = [[<leader>t]],
           direction = 'float',
           insert_mappings = false,
           terminal_mappings = false,
+          shell = shell,
         }
       end,
     },
@@ -741,6 +753,48 @@ require('lazy').setup({
             },
           },
         },
+        golangci_lint_ls = {
+          cmd = { 'golangci-lint-langserver' },
+          init_options = {
+            commands = {
+              'golangci-lint',
+              'run',
+              '--output.json.path',
+              'stdout',
+              '--show-stats=false',
+              '--issues-exit-code=1',
+              '--allow-parallel-runners',
+            },
+            filetypes = { 'go', 'mod' },
+          },
+          --[[ local lspconfig = require 'lspconfig'
+local configs = require 'lspconfig/configs'
+
+if not configs.golanglsp then
+  configs.golanglsp = {
+    default_config = {
+      cmd = { 'golangci-lint-langserver' },
+      root_dir = lspconfig.util.root_pattern('.git', 'go.mod'),
+      init_options = {
+        commands = {
+          'golangci-lint',
+          'run',
+          '--output.json.path',
+          'stdout',
+          '--show-stats=false',
+          '--issues-exit-code=1',
+          '--allow-parallel-runners',
+        },
+      },
+    },
+  }
+end
+
+lspconfig.golangci_lint_ls.setup {
+  filetypes = { 'go', 'mod' },
+}
+]]
+        },
       }
 
       -- Ensure the servers and tools above are installed
@@ -763,9 +817,7 @@ require('lazy').setup({
         'vue_ls',
         'vetur-vls',
         'gopls',
-        'golangci_lint_ls',
       })
-
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
       require('mason-lspconfig').setup {
@@ -1017,7 +1069,7 @@ require('lazy').setup({
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
     config = function()
-      require('nvim-treesitter.configs').setup = {
+      require('nvim-treesitter.configs').setup {
         ensure_installed = {
           'bash',
           'c',
@@ -1031,13 +1083,14 @@ require('lazy').setup({
           'vim',
           'vimdoc',
           'vue',
+          'go',
           'javascript',
           'typescript',
           'tsx',
           'css',
           'scss',
         },
-        auto_install = false,
+        auto_install = true,
         highlight = {
           enable = true,
           additional_vim_regex_highlighting = false,
@@ -1098,33 +1151,6 @@ require('lazy').setup({
 })
 
 vim.cmd 'colorscheme onedark'
-
-local lspconfig = require 'lspconfig'
-local configs = require 'lspconfig/configs'
-
-if not configs.golanglsp then
-  configs.golanglsp = {
-    default_config = {
-      cmd = { 'golangci-lint-langserver' },
-      root_dir = lspconfig.util.root_pattern('.git', 'go.mod'),
-      init_options = {
-        commands = {
-          'golangci-lint',
-          'run',
-          '--output.json.path',
-          'stdout',
-          '--show-stats=false',
-          '--issues-exit-code=1',
-          '--allow-parallel-runners',
-        },
-      },
-    },
-  }
-end
-
-lspconfig.golangci_lint_ls.setup {
-  filetypes = { 'go', 'mod' },
-}
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
