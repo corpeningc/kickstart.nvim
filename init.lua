@@ -1,4 +1,4 @@
--- Set <space> as the leader key
+-- Set <space> as the leader keyinit
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
 vim.g.mapleader = ' '
@@ -529,7 +529,7 @@ require('lazy').setup({
     config = function()
       require('nvim-tree').setup {
         vim.keymap.set('n', '<leader>F', ':NvimTreeToggle<CR>'),
-        vim.keymap.set('n', '<leader>f', ':NvimTreeFindFile<CR>'),
+        vim.keymap.set('n', '<leader>M', ':NvimTreeFindFile<CR>'),
       }
     end,
   },
