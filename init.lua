@@ -223,61 +223,10 @@ rtp:prepend(lazypath)
 -- NOTE: Here is where you install your plugins.
 -- ppp
 require('lazy').setup({
-  -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   'NMAC427/guess-indent.nvim', -- Detect tabstop and shiftwidth automatically
-
-  -- NOTE: Plugins can also be added by using a table,
-  -- with the first argument being the link and the following
-  -- keys can be used to configure plugin behavior/loading/etc.
-  -- Alternatively, use `config = function() ... end` for full control over the configuration.
-  -- If you prefer to call `setup` explicitly, use:
-  --    {
-  --        'lewis6991/gitsigns.nvim',
-  --        config = function()
-  --            require('gitsigns').setup({
-  --                -- Your gitsigns configuration here
-  --            })
-  --        end,
-  --    }
-  --
-  { -- Adds git related signs to the gutter, as well as utilities for managing changes
-    'lewis6991/gitsigns.nvim',
-    opts = {
-      signs = {
-        add = { text = '+' },
-        change = { text = '~' },
-        delete = { text = '_' },
-        topdelete = { text = '‾' },
-        changedelete = { text = '~' },
-      },
-    },
-  },
-
   {
     'nvim-telescope/telescope-fzf-native.nvim',
     build = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build',
-  },
-
-  {
-    { -- Toggle terminal
-      'akinsho/toggleterm.nvim',
-      version = '*',
-      config = function()
-        -- Detect OS and set appropriate shell
-        local shell = vim.o.shell -- Use system default
-        if vim.fn.has 'win32' == 1 or vim.fn.has 'win64' == 1 then
-          shell = 'powershell'
-        end
-
-        require('toggleterm').setup {
-          open_mapping = [[<leader>t]],
-          direction = 'float',
-          insert_mappings = false,
-          terminal_mappings = false,
-          shell = shell,
-        }
-      end,
-    },
   },
 
   {
@@ -519,20 +468,20 @@ require('lazy').setup({
     end,
   },
 
-  {
-    'nvim-tree/nvim-tree.lua',
-    version = '*',
-    lazy = false,
-    dependencies = {
-      'nvim-tree/nvim-web-devicons',
-    },
-    config = function()
-      require('nvim-tree').setup {
-        vim.keymap.set('n', '<leader>F', ':NvimTreeToggle<CR>'),
-        vim.keymap.set('n', '<leader>f', ':NvimTreeFindFile<CR>'),
-      }
-    end,
-  },
+  -- {
+  --   'nvim-tree/nvim-tree.lua',
+  --   version = '*',
+  --   lazy = false,
+  --   dependencies = {
+  --     'nvim-tree/nvim-web-devicons',
+  --   },
+  --   config = function()
+  --     require('nvim-tree').setup {
+  --       vim.keymap.set('n', '<leader>F', ':NvimTreeToggle<CR>'),
+  --       vim.keymap.set('n', '<leader>N', ':NvimTreeFindFile<CR>'),
+  --     }
+  --   end,
+  -- },
 
   -- LSP Plugins
   {
@@ -962,7 +911,7 @@ lspconfig.golangci_lint_ls.setup {
         -- <c-k>: Toggle signature help
         --
         -- See :h blink-cmp-config-keymap for defining your own keymap
-        preset = 'default',
+        preset = 'super-tab',
 
         -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
         --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
@@ -1113,16 +1062,13 @@ lspconfig.golangci_lint_ls.setup {
   -- require 'kickstart.plugins.debug',
   -- require 'kickstart.plugins.indent_line',
   -- require 'kickstart.plugins.lint',
-  require 'kickstart.plugins.autopairs',
-  -- require 'kickstart.plugins.neo-tree',
-  -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
+  require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
   --
-  --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
-  -- { import = 'custom.plugins' },
-  --
+  { import = 'plugins' },
+  -- -- Adds git related signs to the gutter, as well as utilities for managing changes
   -- For additional information with loading, sourcing and examples see `:help lazy.nvim-🔌-plugin-spec`
   -- Or use telescope!
   -- In normal mode type `<space>sh` then write `lazy.nvim-plugin`
