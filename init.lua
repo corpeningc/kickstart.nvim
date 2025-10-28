@@ -124,10 +124,10 @@ vim.keymap.set('n', '<leader>v', ':vsplit<CR>', { desc = 'Vertical Split' })
 vim.keymap.set('n', '<leader>s', ':split<CR>', { desc = 'Horizontal Split' })
 
 -- [[ Pane Navigation ]]
-vim.keymap.set('n', '<leader>h', '<C-w>h', { desc = 'Go to left pane' })
-vim.keymap.set('n', '<leader>l', '<C-w>l', { desc = 'Go to right pane' })
-vim.keymap.set('n', '<leader>k', '<C-w>k', { desc = 'Go to top pane' })
-vim.keymap.set('n', '<leader>j', '<C-w>j', { desc = 'Go to bottom pane' })
+vim.keymap.set('n', '<C-Up>', '<C-w>+', { desc = 'Go to left pane' })
+vim.keymap.set('n', '<C-Down>', '<C-w>-', { desc = 'Go to right pane' })
+vim.keymap.set('n', '<C-Right>', '<C-w><', { desc = 'Go to top pane' })
+vim.keymap.set('n', '<C-Left>', '<C-w>>', { desc = 'Go to bottom pane' })
 
 -- [[ Better search ]]
 vim.keymap.set('n', 'n', 'nzzzv', { desc = 'Next search result' })
