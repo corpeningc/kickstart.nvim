@@ -266,8 +266,15 @@ require('lazy').setup({
 
   -- Lazy
   {
-    'olimorris/onedarkpro.nvim',
-    priority = 1000, -- Ensure it loads first
+    'sainnhe/everforest',
+    lazy = false,
+    priority = 1000,
+    config = function()
+      vim.g.everforest_background = 'hard' -- 'hard', 'medium', 'soft'
+      vim.g.everforest_better_performance = 1
+
+      vim.cmd [[colorscheme everforest]]
+    end,
   },
 
   { -- Adds comment commands
@@ -838,7 +845,7 @@ lspconfig.golangci_lint_ls.setup {
       -- Load the colorscheme here.
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'tokyonight-night'
+      -- vim.cmd.colorscheme 'tokyonight-night'
     end,
   },
 
@@ -963,7 +970,7 @@ lspconfig.golangci_lint_ls.setup {
   },
 })
 
-vim.cmd 'colorscheme onedark'
+-- vim.cmd 'colorscheme onedark'
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
