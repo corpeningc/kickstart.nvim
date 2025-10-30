@@ -121,7 +121,7 @@ vim.keymap.set('v', '<', '<gv', { desc = 'Indent left' })
 
 -- [[ Splits ]]
 vim.keymap.set('n', '<leader>v', ':vsplit<CR>', { desc = 'Vertical Split' })
-vim.keymap.set('n', '<leader>s', ':split<CR>', { desc = 'Horizontal Split' })
+vim.keymap.set('n', '<leader>S', ':split<CR>', { desc = 'Horizontal Split' })
 
 -- [[ Pane Navigation ]]
 vim.keymap.set('n', '<C-Up>', '<C-w>+', { desc = 'Go to left pane' })
