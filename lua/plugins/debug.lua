@@ -1,10 +1,6 @@
--- debug.lua
+-- debug.luadebug
 --
 -- Shows how to use the DAP plugin to debug your code.
---
--- Primarily focused on configuring the debugger for Go, but can
--- be extended to other languages as well. That's why it's called
--- kickstart.nvim and not kitchen-sink.nvim ;)
 
 return {
   -- NOTE: Yes, you can install new plugins here!
@@ -81,6 +77,9 @@ return {
     local dap = require 'dap'
     local dapui = require 'dapui'
 
+    -- Enable verbose DAP logging
+    dap.set_log_level 'TRACE'
+
     require('mason-nvim-dap').setup {
       -- Makes a best effort to setup the various debuggers with
       -- reasonable debug configurations
@@ -96,6 +95,7 @@ return {
         -- Update this to ensure that you have the debuggers for the langs you want
         'delve',
         'netcoredbg',
+        'cpptools', -- includes vsdbg
       },
     }
 
@@ -122,16 +122,16 @@ return {
     }
 
     -- Change breakpoint icons
-    -- vim.api.nvim_set_hl(0, 'DapBreak', { fg = '#e51400' })
-    -- vim.api.nvim_set_hl(0, 'DapStop', { fg = '#ffcc00' })
-    -- local breakpoint_icons = vim.g.have_nerd_font
-    --     and { Breakpoint = '', BreakpointCondition = '', BreakpointRejected = '', LogPoint = '', Stopped = '' }
-    --   or { Breakpoint = '●', BreakpointCondition = '⊜', BreakpointRejected = '⊘', LogPoint = '◆', Stopped = '⭔' }
-    -- for type, icon in pairs(breakpoint_icons) do
-    --   local tp = 'Dap' .. type
-    --   local hl = (type == 'Stopped') and 'DapStop' or 'DapBreak'
-    --   vim.fn.sign_define(tp, { text = icon, texthl = hl, numhl = hl })
-    -- end
+    vim.api.nvim_set_hl(0, 'DapBreak', { fg = '#e51400' })
+    vim.api.nvim_set_hl(0, 'DapStop', { fg = '#ffcc00' })
+    local breakpoint_icons = vim.g.have_nerd_font
+        and { Breakpoint = '', BreakpointCondition = '', BreakpointRejected = '', LogPoint = '', Stopped = '' }
+      or { Breakpoint = '●', BreakpointCondition = '⊜', BreakpointRejected = '⊘', LogPoint = '◆', Stopped = '⭔' }
+    for type, icon in pairs(breakpoint_icons) do
+      local tp = 'Dap' .. type
+      local hl = (type == 'Stopped') and 'DapStop' or 'DapBreak'
+      vim.fn.sign_define(tp, { text = icon, texthl = hl, numhl = hl })
+    end
 
     dap.listeners.after.event_initialized['dapui_config'] = dapui.open
     dap.listeners.before.event_terminated['dapui_config'] = dapui.close
@@ -146,11 +146,19 @@ return {
       },
     }
 
-    -- C# / .NET debugging configuration
+    -- C# / .NET debugging configuration with netcoredbg
     dap.adapters.coreclr = {
       type = 'executable',
-      command = 'netcoredbg',
-      args = { '--interpreter=vscode' }
+      command = vim.fn.stdpath 'data' .. '/mason/packages/netcoredbg/netcoredbg/netcoredbg.exe',
+      args = { '--interpreter=vscode', '--engineLogging' },
+    }
+
+    -- C# / .NET debugging with vsdbg (Visual Studio debugger)
+    -- Note: vsdbg can be finicky on Windows. Consider using netcoredbg instead.
+    dap.adapters.vsdbg = {
+      type = 'executable',
+      command = vim.fn.stdpath 'data' .. '/mason/packages/cpptools/extension/debugAdapters/bin/OpenDebugAD7.exe',
+      args = {},
     }
 
     dap.configurations.cs = {
@@ -162,11 +170,43 @@ return {
           return vim.fn.input('Path to dll: ', vim.fn.getcwd() .. '/bin/Debug/', 'file')
         end,
       },
+
       {
         type = 'coreclr',
         name = 'attach - netcoredbg',
         request = 'attach',
         processId = require('dap.utils').pick_process,
+      },
+
+      {
+        type = 'coreclr',
+        name = 'attach by PID - netcoredbg',
+        request = 'attach',
+        processId = function()
+          local pid = vim.fn.input 'Process ID: '
+          return tonumber(pid)
+        end,
+      },
+
+      {
+        type = 'vsdbg',
+        name = 'attach - vsdbg',
+        request = 'attach',
+        processId = require('dap.utils').pick_process,
+        justMyCode = false,
+        stopAtEntry = false,
+      },
+
+      {
+        type = 'vsdbg',
+        name = 'attach by PID - vsdbg',
+        request = 'attach',
+        processId = function()
+          local pid = vim.fn.input 'Process ID: '
+          return tonumber(pid)
+        end,
+        justMyCode = false,
+        stopAtEntry = false,
       },
     }
   end,
