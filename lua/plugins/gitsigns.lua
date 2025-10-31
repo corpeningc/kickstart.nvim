@@ -1,5 +1,5 @@
 -- Adds git related signs to the gutter, as well as utilities for managing changes
---[[ return {
+return {
   'lewis6991/gitsigns.nvim',
   opts = {
     signs = {
@@ -9,11 +9,6 @@
       topdelete = { text = '‾' },
       changedelete = { text = '~' },
     },
-  },
-} ]]
-return {
-  'lewis6991/gitsigns.nvim',
-  opts = {
     on_attach = function(bufnr)
       local gitsigns = require 'gitsigns'
 
