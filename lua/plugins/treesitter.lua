@@ -7,7 +7,6 @@ return {
       ensure_installed = {
         'bash',
         'c',
-        'cs',
         'diff',
         'html',
         'lua',
