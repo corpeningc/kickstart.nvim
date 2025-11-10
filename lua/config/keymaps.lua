@@ -5,6 +5,7 @@ vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous [D]
 -- [[ Leader Keymaps ]]
 vim.keymap.set('n', '<leader>w', ':w<CR>', { desc = 'Save file' })
 vim.keymap.set('n', '<leader>q', ':q!<CR>', { desc = 'Quit without saving' })
+vim.keymap.set('n', '<leader>Q', ':qa<CR>', { desc = 'Quit without saving' })
 vim.keymap.set('n', '<leader>x', ':x!<CR>', { desc = 'Save and quit' })
 vim.keymap.set('n', '<leader>u', ':e!<CR>', { desc = 'Reload file' })
 vim.keymap.set('n', '<leader>o', ':only!<CR>', { desc = 'Close other windows' })

@@ -5,6 +5,7 @@ return {
   config = function()
     require('nvim-treesitter.configs').setup {
       ensure_installed = {
+        'astro',
         'bash',
         'c',
         'diff',
@@ -24,6 +25,9 @@ return {
         'css',
         'scss',
       },
+      modules = {},
+      sync_install = true,
+      ignore_install = {},
       auto_install = true,
       highlight = {
         enable = true,
