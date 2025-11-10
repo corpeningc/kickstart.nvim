@@ -176,7 +176,7 @@ return {
         name = '@vue/typescript-plugin',
         location = vue_language_server_path,
         languages = { 'vue' },
-        confingNamespace = 'typescript',
+        configNamespace = 'typescript',
       }
 
       local ts_ls_config = {

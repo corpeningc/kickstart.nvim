@@ -6,3 +6,21 @@ vim.api.nvim_create_autocmd('TextYankPost', {
     vim.hl.on_yank()
   end,
 })
+
+vim.api.nvim_create_autocmd('BufNewFile', {
+  pattern = '*/diary/*.md',
+  callback = function()
+    local date = vim.fn.strftime '%Y-%m-%d %A'
+    vim.api.nvim_buf_set_lines(0, 0, 0, false, {
+      '# ' .. date,
+      '',
+      '## Tasks',
+      '- [ ] ',
+      '',
+      '## Notes',
+      '',
+      '## Log',
+      '',
+    })
+  end,
+})

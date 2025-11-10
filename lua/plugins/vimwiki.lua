@@ -19,4 +19,9 @@ return {
     -- Use vim.empty_dict() to create an empty Vim dictionary
     vim.g.vimwiki_ext2syntax = vim.empty_dict()
   end,
+  require('render-markdown').setup {
+    file_types = { 'markdown', 'vimwiki' },
+  },
+
+  vim.treesitter.language.register('markdown', 'vimwiki'),
 }
