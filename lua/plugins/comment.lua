@@ -3,11 +3,11 @@ return {
   opts = {
     opleader = {
       line = '<leader>c',
-      block = '<leader>b',
+      block = '<leader>cb',
     },
     toggler = {
       line = '<leader>cc',
-      block = '<leader>bb',
+      block = '<leader>cbb',
     },
     extra = {
       above = '<leader>cO',

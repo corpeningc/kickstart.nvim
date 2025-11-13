@@ -6,7 +6,6 @@ return {
     config = function()
       vim.g.everforest_background = 'hard'
       vim.g.everforest_better_performance = 1
-      vim.cmd [[colorscheme everforest]]
     end,
   },
 
@@ -19,6 +18,14 @@ return {
           comments = { italic = false },
         },
       }
+    end,
+  },
+
+  {
+    'rebelot/kanagawa.nvim',
+    priority = 1000,
+    config = function()
+      vim.cmd [[colorscheme kanagawa]]
     end,
   },
 }

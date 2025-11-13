@@ -3,17 +3,19 @@ vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next [D]iagn
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous [D]iagnostic message' })
 
 -- [[ Leader Keymaps ]]
-vim.keymap.set('n', '<leader>w', ':w<CR>', { desc = 'Save file' })
-vim.keymap.set('n', '<leader>q', ':q!<CR>', { desc = 'Quit without saving' })
-vim.keymap.set('n', '<leader>Q', ':qa<CR>', { desc = 'Quit without saving' })
-vim.keymap.set('n', '<leader>x', ':x!<CR>', { desc = 'Save and quit' })
-vim.keymap.set('n', '<leader>u', ':e!<CR>', { desc = 'Reload file' })
-vim.keymap.set('n', '<leader>o', ':only!<CR>', { desc = 'Close other windows' })
+vim.keymap.set('n', '<leader>bw', ':w<CR>', { desc = 'Write [F]ile' })
+vim.keymap.set('n', '<leader>bq', ':q!<CR>', { desc = 'Quit [F]ile without saving' })
+vim.keymap.set('n', '<leader>bQ', ':qa<CR>', { desc = 'Quit all without saving' })
+vim.keymap.set('n', '<leader>bx', ':x!<CR>', { desc = 'Save and quit [F]ile' })
+vim.keymap.set('n', '<leader>bu', ':e!<CR>', { desc = 'Reload [F]ile' })
+vim.keymap.set('n', '<leader>bo', ':only!<CR>', { desc = 'Close other [F]iles' })
 -- Splits
-vim.keymap.set('n', '<leader>v', ':vsplit<CR>', { desc = 'Vertical Split' })
-vim.keymap.set('n', '<leader>S', ':split<CR>', { desc = 'Horizontal Split' })
+vim.keymap.set('n', '<leader>bv', ':vsplit<CR>', { desc = 'Vertical Split' })
+vim.keymap.set('n', '<leader>bs', ':split<CR>', { desc = 'Horizontal Split' })
 
 -- [[ Movement Keymaps ]]
+vim.keymap.set('n', '<C-d>', '<C-d>zz', { desc = 'Down half page' })
+vim.keymap.set('n', '<C-u>', '<C-u>zz', { desc = 'Up half page' })
 vim.keymap.set('n', 'H', '^', { desc = 'Go to line start' })
 vim.keymap.set('n', 'L', '$', { desc = 'Go to line end' })
 vim.keymap.set('n', 'K', ':move .-2<CR>==', { desc = 'Go to line start' })
