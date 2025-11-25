@@ -28,4 +28,8 @@ return {
       vim.cmd [[colorscheme kanagawa]]
     end,
   },
+  {
+    'Mofiqul/dracula.nvim',
+    priority = 1000,
+  },
 }

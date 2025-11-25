@@ -11,10 +11,11 @@ return {
 
       require('toggleterm').setup {
         open_mapping = [[<leader>t]],
-        direction = 'float',
+        direction = 'horizontal',
         insert_mappings = false,
         terminal_mappings = false,
         shell = shell,
+        size = 15,
       }
     end,
   },
