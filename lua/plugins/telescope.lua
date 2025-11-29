@@ -141,6 +141,5 @@ return { -- Fuzzy Finder (files, lsp, etc)
     end
 
     vim.keymap.set('n', '<leader>cd', cd_picker, { desc = '[C]hange [D]irectory' })
-    vim.keymap.set('n', '<leader>cd', cd_picker, { desc = '[C]hange [D]irectory' })
   end,
 }
