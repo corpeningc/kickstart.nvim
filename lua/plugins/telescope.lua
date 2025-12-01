@@ -135,6 +135,7 @@ return { -- Fuzzy Finder (files, lsp, etc)
               print('Changed to: ' .. vim.fn.getcwd())
               -- Open scratch buffer
               vim.cmd 'enew'
+              vim.cmd 'intro'
               vim.bo.buftype = 'nofile'
               vim.bo.bufhidden = 'hide'
               vim.bo.swapfile = false
