@@ -133,6 +133,11 @@ return { -- Fuzzy Finder (files, lsp, etc)
               actions.close(prompt_bufnr)
               vim.cmd('cd ' .. selection.value)
               print('Changed to: ' .. vim.fn.getcwd())
+              -- Open scratch buffer
+              vim.cmd 'enew'
+              vim.bo.buftype = 'nofile'
+              vim.bo.bufhidden = 'hide'
+              vim.bo.swapfile = false
             end)
             return true
           end,
