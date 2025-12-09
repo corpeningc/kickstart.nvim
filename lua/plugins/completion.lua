@@ -1,6 +1,6 @@
 return {
   'saghen/blink.cmp',
-  event = 'VimEnter',
+  event = 'InsertEnter', -- Load when entering insert mode instead of immediately
   version = '1.*',
   dependencies = {
     {

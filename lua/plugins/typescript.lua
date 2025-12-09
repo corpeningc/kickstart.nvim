@@ -1,6 +1,7 @@
 return {
   {
     'pmizio/typescript-tools.nvim',
+    ft = { 'typescript', 'typescriptreact', 'javascript', 'javascriptreact' }, -- Only load for TS/JS files
     dependencies = { 'nvim-lua/plenary.nvim', 'neovim/nvim-lspconfig' },
     opts = {},
   },

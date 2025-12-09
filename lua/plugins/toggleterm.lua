@@ -17,6 +17,8 @@ return {
         shell = shell,
         size = 15,
       }
+
+      vim.keymap.set('n', '<leader>tg', ':TermExec cmd="cgit"<CR>')
     end,
   },
 }
