@@ -1,35 +1,22 @@
 return {
   {
-    'sainnhe/everforest',
+    'rebelot/kanagawa.nvim',
     lazy = false,
     priority = 1000,
     config = function()
-      vim.g.everforest_background = 'hard'
-      vim.g.everforest_better_performance = 1
-    end,
-  },
-
-  {
-    'folke/tokyonight.nvim',
-    priority = 1000,
-    config = function()
-      require('tokyonight').setup {
-        styles = {
-          comments = { italic = false },
+      require('kanagawa').setup {
+        colors = {
+          theme = {
+            all = {
+              ui = {
+                bg = '#1c1917', -- oklch(27.4% 0.006 286.033)
+                bg_gutter = 'none',
+              },
+            },
+          },
         },
       }
-    end,
-  },
-
-  {
-    'rebelot/kanagawa.nvim',
-    priority = 1000,
-    config = function()
       vim.cmd [[colorscheme kanagawa]]
     end,
-  },
-  {
-    'Mofiqul/dracula.nvim',
-    priority = 1000,
   },
 }
