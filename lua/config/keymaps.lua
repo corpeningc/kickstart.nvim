@@ -62,3 +62,24 @@ vim.keymap.set('n', '<leader><Enter>', 'O<Esc>', { desc = 'Newline Above' })
 
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
+
+-- [[ Custom stuff]]
+-- Copy current p
+--
+vim.keymap.set('n', '<leader>gp', function()
+  local filepath = vim.fn.expand '%:p'
+  vim.fn.setreg('+', filepath)
+  print('Copied: ' .. filepath)
+end, { desc = '[G]et file[p]ath' })
+
+vim.keymap.set('n', '<leader>gd', function()
+  local dirpath = vim.fn.expand '%:p:h'
+  vim.fn.setreg('+', dirpath)
+  print('Copied: ' .. dirpath)
+end, { desc = '[G]et [D]irectory path' })
+
+vim.keymap.set('n', '<leader>gf', function()
+  local filename = vim.fn.expand '%:t'
+  vim.fn.setreg('+', filename)
+  print('Copied: ' .. filename)
+end, { desc = '[G]et [F]ile name' })

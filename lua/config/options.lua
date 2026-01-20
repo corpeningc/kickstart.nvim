@@ -14,6 +14,10 @@ vim.g.have_nerd_font = true
 
 vim.o.incsearch = true
 vim.o.hlsearch = true
+vim.o.relativenumber = true
+
+-- No end of line
+vim.o.fixendofline = false
 
 -- Make line numbers default
 vim.o.number = true
