@@ -121,7 +121,6 @@ return {
       local capabilities = require('blink.cmp').get_lsp_capabilities()
 
       local servers = {
-        gopls = {},
         lua_ls = {
           settings = {
             Lua = {
@@ -129,21 +128,6 @@ return {
                 callSnippet = 'Replace',
               },
             },
-          },
-        },
-        golangci_lint_ls = {
-          cmd = { 'golangci-lint-langserver' },
-          init_options = {
-            commands = {
-              'golangci-lint',
-              'run',
-              '--output.json.path',
-              'stdout',
-              '--show-stats=false',
-              '--issues-exit-code=1',
-              '--allow-parallel-runners',
-            },
-            filetypes = { 'go', 'mod' },
           },
         },
       }
@@ -154,7 +138,6 @@ return {
         'ts_ls',
         'vue_ls',
         'vetur-vls',
-        'gopls',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 

@@ -21,7 +21,6 @@ return {
         'vim',
         'vimdoc',
         'vue',
-        'go',
         'javascript',
         'typescript',
         'tsx',

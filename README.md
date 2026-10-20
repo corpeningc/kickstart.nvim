@@ -72,7 +72,6 @@ nvim
 Configured LSP servers:
 - **Lua** - lua_ls
 - **TypeScript/JavaScript** - ts_ls with Vue support
-- **Go** - gopls with golangci-lint
 - **C#** - Roslyn
 - **Vue** - Vetur/Vue Language Server
 
