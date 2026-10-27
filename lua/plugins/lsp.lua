@@ -41,7 +41,12 @@ return {
             vim.lsp.semantic_tokens.start(event.buf, client.id)
           end
 
-          map('gh', vim.lsp.buf.hover, 'Hover Documentation')
+          map('gh', function()
+            vim.lsp.buf.hover { border = 'rounded' }
+          end, 'Hover Documentation')
+          map('<C-s>', function()
+            vim.lsp.buf.signature_help { border = 'rounded' }
+          end, 'Signature Help', { 'i', 's' })
           map('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
           map('<leader>r', vim.lsp.buf.rename, '[R]e[n]ame')
           map('gra', vim.lsp.buf.code_action, '[G]oto Code [A]ction', { 'n', 'x' })
@@ -90,14 +95,6 @@ return {
             end, '[T]oggle Inlay [H]ints')
           end
         end,
-      })
-
-      vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, {
-        border = 'rounded',
-      })
-
-      vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, {
-        border = 'rounded',
       })
 
       vim.diagnostic.config {
